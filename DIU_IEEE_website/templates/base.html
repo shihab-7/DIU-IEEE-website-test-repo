@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="{% static 'favicon-96x96.png' %}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}" />
+    <link rel="manifest" href="{% static 'site.webmanifest' %}" />
+    <title>
+        {% block title  %}
+
+        {% endblock  %}
+    </title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+
+<body class="bg-[url('{{site_settings.background_image.url}}')] bg-cover bg-center bg-no-repeat bg-fixed backdrop-brightness-50">
+    <!-- Navbar -->
+
+    <nav class="bg-black backdrop-invert backdrop-opacity-50 fixed w-full z-10 top-0 left-0 shadow-md">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="relative flex items-center justify-between h-16">
+                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                    <!-- Mobile menu button-->
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                    <div class="flex-shrink-0 px-2 justify-center items-center flex">
+                        <img class="h-8 w-8 rounded-full object-cover" src="{{site_settings.logo.url}}" alt="Logo">
+                    </div>
+                    <div class="flex-shrink-0 text-green-500 text-4xl font-extrabold">
+                       <a href="{% url 'home' %}">{{site_settings.site_name}}</a>
+                    </div>
+                    <div class="hidden sm:block sm:ml-6">
+                        <div class="flex space-x-4 flex-wrap">
+                            <a href="{% url 'home' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                            <a href="{% url 'home' %}#events_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Events</a>
+                            <a href="{% url 'home' %}#advisors_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Advisors</a>
+                            <a href="{% url 'home' %}#committee_members_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Members</a>
+                            <a href="{% url 'home' %}#contact_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                            <a href="{% url 'research' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Research</a>
+                            
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'profile_view' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+                                <form action="{% url 'logout' %}" method="POST" class="inline-block">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Log Out</button>
+                                </form>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                                <a href="{% url 'register' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="sm:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'home' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="{% url 'home' %}#events_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Events</a>
+                <a href="{% url 'home' %}#advisors_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Advisors</a>
+                <a href="{% url 'home' %}#committee_members_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Members</a>
+                <a href="{% url 'home' %}#contact_section" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+                <a href="{% url 'research' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Research</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile_view' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profile</a>
+                        <form action="{% url 'logout' %}" method="POST" class="inline-block">
+                            {% csrf_token %}
+                            <button type="submit" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Log Out</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Login</a>
+                        <a href="{% url 'register' %}" class="text-yellow-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Register</a>
+                    {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+    
+    {% endblock  %}
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8 relative bottom-0 left-0 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Logo Section -->
+                <div class="flex flex-col items-center md:items-start">
+                    <img class="h-16 w-16 rounded-full object-cover mb-4 animate-[ping_3s_ease-in-out_infinite]" src="{{site_settings.logo.url}}" alt="Logo">
+                    <h3 class="text-lg font-bold hover:text-green-500">{{site_settings.site_name}}</h3>
+                </div>
+                <!-- About Section -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 hover:text-green-500">About</h3>
+                    <p class="text-sm">
+                        DIU IEEE is dedicated to fostering technological innovation and excellence for the benefit of humanity. Join us to explore, learn, and grow.
+                    </p>
+                </div>
+                <!-- Address Section -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 hover:text-green-500">Address</h3>
+                    <p class="text-sm flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.88 3.549A9.956 9.956 0 0012 2C7.03 2 3 6.03 3 11c0 5.25 7 11 9 11s9-5.75 9-11c0-1.61-.38-3.13-1.12-4.451z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11a3 3 0 110-6 3 3 0 010 6z" />
+                        </svg>
+                        <a class="hover:text-yellow-300 cursor-pointer" target="_blank" href="https://www.google.com/maps/place/Dhaka+International+University/@23.7936829,90.4468367,20.24z/data=!4m14!1m7!3m6!1s0x3755c775164bf631:0x97f48a5be913a9fc!2sDhaka+International+University!8m2!3d23.7937364!4d90.4471447!16s%2Fm%2F02w7_zy!3m5!1s0x3755c775164bf631:0x97f48a5be913a9fc!8m2!3d23.7937364!4d90.4471447!16s%2Fm%2F02w7_zy?entry=ttu&g_ep=EgoyMDI1MDQyOS4wIKXMDSoASAFQAw%3D%3D">
+                            Satarkul, Badda, Dhaka-1212, Bangladesh.
+                        </a>
+                    </p>
+                </div>
+                <!-- Contact Section -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 hover:text-green-500">Contact</h3>
+                    <div class="flex space-x-4 justify-center md:justify-start">
+                        {% if site_settings.social_media_links %}
+                        {% with site_settings.social_media_links as links %}
+                        <a target="_blank" href="{{links.facebook}}" class="text-gray-300 hover:text-blue-500">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.31h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.324-.593 1.324-1.324V1.325C24 .593 23.407 0 22.675 0z"/>
+                            </svg>
+                        </a>
+                        <a target="_blank" href="mailto:{{site_settings.contact_email}}" class="text-gray-300 hover:text-orange-500">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 13.065L.8 4.8V19.2h22.4V4.8L12 13.065zM12 10.935L23.2 2.4H.8L12 10.935z"/>
+                            </svg>
+                        </a>
+                        <a target="_blank" href="{{links.website}}" class="text-gray-300 hover:text-green-500">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor"  viewBox="0 0 24 24">
+                                <path d="M12 0a12 12 0 0 0-9.26 19.64C9.91 28.29 24 23.21 24 12A12 12 0 0 0 12 0zm8.39 17.44A11.82 11.82 0 0 0 16.83 15a27.47 27.47 0 0 0 0-6.08 11.82 11.82 0 0 0 3.56-2.4 10 10 0 0 1 0 10.92zm-4.78 3.87c-1 .4.16.2.95-4.21a10 10 0 0 1 2.58 1.9 9.81 9.81 0 0 1-3.53 2.31zm-3.68.69c-.75-.1-2-1.94-2.58-5.65a10.35 10.35 0 0 1 5.3 0c-.24 1.48-1.22 5.65-2.72 5.65zm-3.54-.69A9.9 9.9 0 0 1 4.86 19a10 10 0 0 1 2.58-1.9c.81 4.51 2.02 4.63.95 4.21zm0-18.64c.86-.33-.25 0-1 4.23A10 10 0 0 1 4.86 5a9.79 9.79 0 0 1 3.58-2.33zm7.12 0A9.87 9.87 0 0 1 19.14 5a10 10 0 0 1-2.58 1.9c-.8-4.46-1.97-4.61-1-4.23zm-6.4 11.69a25.66 25.66 0 0 1 0-4.72 11.78 11.78 0 0 0 5.78 0 24.81 24.81 0 0 1 0 4.72 12.28 12.28 0 0 0-5.78 0zM11.91 2c1.51 0 2.5 4.16 2.74 5.65a10.35 10.35 0 0 1-5.3 0C10 4 11.17 2.12 11.91 2zm-8.3 4.56A11.82 11.82 0 0 0 7.17 9a27.47 27.47 0 0 0 0 6.08 11.82 11.82 0 0 0-3.56 2.4 10 10 0 0 1 0-10.92z"/>
+                            </svg>
+                        </a>
+                        <a target="_blank" href="{{links.linkedin}}" class="text-gray-300 hover:text-blue-700">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0zM7.08 20.45H3.56V9h3.52v11.45zM5.32 7.5c-1.13 0-2.05-.92-2.05-2.05s.92-2.05 2.05-2.05 2.05.92 2.05 2.05-.92 2.05-2.05 2.05zm15.13 12.95h-3.52v-5.6c0-1.34-.03-3.06-1.86-3.06-1.86 0-2.15 1.45-2.15 2.95v5.71h-3.52V9h3.38v1.56h.05c.47-.89 1.62-1.83 3.34-1.83 3.57 0 4.23 2.35 4.23 5.41v6.31z"/>
+                            </svg>
+                        </a>
+                        {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-xs">
+                &copy; 2025 DIU IEEE. All rights reserved.<br> Developed by <span class="text-orange-500 font-mono">Shihab </span>( <span class="bg-gradient-to-r from-green-500 to-yellow-300 text-transparent bg-clip-text">Webmaster</span> )
+            </div>
+        </div>
+    </footer>
+    <script src="{% static "js/scripts.js" %}"></script>
+</body>
+</html>

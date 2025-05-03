@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section id="research-works" class="bg-transparent py-8">
+
+    <div class="container mx-auto px-4 py-10 mt-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for research in research_works %}
+            <div class="bg-gray-800 bg-opacity-75 shadow-md rounded-lg overflow-hidden">
+                {% if research.image %}
+                <img src="{{ research.image.url }}" alt="{{ research.title }}" class="w-full h-48 object-cover">
+                {% else %}
+                <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                    No Image
+                </div>
+                {% endif %}
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2 text-orange-500">{{ research.title }}</h3>
+                    {% if research.user.first_name and research.user.last_name %}
+                        <p class="text-cyan-200 mb-4">Researcher : <span class="text-blue-500">{{ research.user.first_name|capfirst }} {{ research.user.last_name|capfirst }}</span></p>
+                    {% else %}
+                        <p class="text-cyan-200 mb-4">Researcher : <span class="text-blue-500">{{ research.user.username|capfirst }}</span></p>
+                    {% endif %}
+                    <p class="text-cyan-200 mb-4">Added on: <span class="text-yellow-500">{{ research.date_created|date:"F j, Y" }}</span></p>
+                    {% if research.link %}
+                        <a href="{{ research.link }}" target="_blank" class="block text-center bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                            View Details
+                        </a>
+                    {% else %}
+                        <p class="text-red-500 text-center">No link available</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-600 text-center col-span-full">No research works available.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+{% endblock %}

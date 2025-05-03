@@ -1,0 +1,132 @@
+{% extends "base.html" %} 
+{% block title %}{{ user.username }}'s Profile{% endblock %} 
+{% block content %}
+
+<section class="bg-transparent min-h-screen flex items-center justify-center py-10">
+
+    <div class="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 shadow-md rounded-lg py-10 mt-10 mb-6">
+        <div class="flex flex-col md:flex-row items-center md:items-start">
+          <div
+            class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-300"
+          >
+          {% if user.profile.profile_picture %}
+            <img
+              src="{{ user.profile.profile_picture.url }}"
+              alt="{{ user.username }}"
+              class="w-full h-full object-cover"
+            />
+          {% else %}
+            <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+              No Image
+            </div>
+          {% endif %}
+          </div>
+          <div class="mt-4 md:mt-0 md:ml-6 text-center md:text-left">
+            <h1 class="text-2xl font-bold text-blue-500">{{ user.username }} (<span class="text-[15px] text-green-500">{{ user.profile.member_id }}</span>)</h1>
+            <p class="text-orange-600"><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+            <p class="text-cyan-200">{{ user.profile.member_type|capfirst }} {{ user.profile.club_position|upper }}</p>
+            <p class="mt-2 text-gray-500">{{ user.profile.bio }}</p>
+          </div>
+        </div>
+        <div class="mt-6">
+          <h2 class="text-xl font-semibold text-cyan-200">Details</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <p class="text-green-300 font-medium">Full Name :</p>
+              {% if user.first_name and user.last_name %}
+              <p class="text-white">{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}</p>
+              {% else %}
+              <p class="text-white">{{ user.username|capfirst }}</p>
+              {% endif %}
+            </div>
+            <div>
+              <p class="text-green-300 font-medium">About :</p>
+              <p class="text-white">{{ user.profile.about}}</p>
+            </div>
+            <div>
+              <p class="text-green-300 font-medium">Skills :</p>
+              <p class="text-white">{{ user.profile.skills }}</p>
+            </div>
+            <div>
+              <p class="text-green-300 font-medium">Joined :</p>
+              <p class="text-white">{{ user.date_joined|date:"F j, Y" }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a
+            href="{% url 'edit_profile' %}"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Edit Profile
+          </a>
+        </div>
+        <div class="mt-10">
+
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-semibold text-cyan-200">Research & Works</h2>
+            <a
+              href="{% url 'add_project' %}"
+              class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Add Research
+            </a>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+            {% for project in user.projects.all %}
+            <div class="p-4 bg-gray-700 bg-opacity-25 shadow-md rounded-lg">
+              <div class="w-full h-40 overflow-hidden rounded-lg">
+                {% if project.image %}
+                <img
+                  src="{{ project.image.url }}"
+                  alt="{{ project.title }}"
+                  class="w-full h-full object-cover"
+                />
+                {% else %}
+                <div
+                  class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500"
+                >
+                  No Image
+                </div>
+                {% endif %}
+              </div>
+              <h3 class="text-lg font-bold text-gray-300 mt-4">
+                {{ project.title }}
+              </h3>
+              
+              {% if project.link %}
+              <a
+                href="{{ project.link }}"
+                target="_blank"
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mt-2 inline-block"
+              >
+                Check Out
+              </a>
+              {% else %}
+              <p class="text-gray-500 mt-2">No link available</p>
+              {% endif %}
+              <div class="flex justify-between mt-4">
+                <a
+                  href="{% url 'edit_project' project_id=project.id %}"
+                  class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                >
+                  Edit
+                </a>
+                <a
+                  href="{% url 'delete_project' project_id=project.id %}"
+                  class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Delete
+                </a>
+              </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-600">No Research added yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+</section>
+{% endblock %}

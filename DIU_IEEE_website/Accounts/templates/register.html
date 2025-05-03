@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Register Page{% endblock %}
+{% block content %}
+
+<section class="register flex items-center justify-center py-10">
+    <div class="w-full max-w-lg bg-gray-700 bg-opacity-75 border-2 border-solid rounded-lg shadow-md p-6 py-8 mt-8">
+        <h2 class="text-2xl font-bold text-center text-cyan-200 mb-6">Sign Up</h2>
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="mb-4 text-red-600">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+                <div class="space-y-4">
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-green-400 mb-2">{{ field.label }}</label>
+                    {{ field|add_class:"w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" }}
+                    {% if field.errors %}
+                    <p class="text-sm text-red-500 mt-1">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="submit"
+                    class="mt-4 w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Sign Up
+                </button>
+        </form>
+        <p class="mt-4 text-sm text-center text-gray-200">
+            Already have an account? <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Edit Project{% endblock %}
+{% block content %}
+
+<section class="edit-project flex items-center justify-center py-10">
+    <div class="w-full max-w-lg bg-gray-700 bg-opacity-75 border-2 border-solid rounded-lg shadow-md p-6 py-8 mt-8">
+        <h2 class="text-2xl font-bold text-center text-cyan-200 mb-6">Edit Project</h2>
+        <form method="POST" action="{% url 'edit_project' project.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-4">
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-green-400 mb-2">{{ field.label }}</label>
+                    {{ field|add_class:"w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" }}
+                    {% if field.help_text %}
+                    <p class="text-xs text-gray-400 mt-1">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                    <p class="text-sm text-red-500 mt-1">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit"
+                class="mt-4 w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                Save Changes
+            </button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

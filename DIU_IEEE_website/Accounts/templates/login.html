@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Login Page{% endblock %}
+{% block content %}
+
+<section class="login flex items-center justify-center">
+
+    <div class=" flex items-center justify-center min-h-screen">
+        <div class="w-full max-w-sm bg-gray-50 dark:bg-gray-900 border-2 border-solid rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-center text-blue-400 mb-6">Login</h2>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="space-y-4 mb-4">
+                    <div>
+                        <label for="id_username" class="block text-sm font-medium text-green-400 mb-2">Username</label>
+                        {{ form.username|add_class:"w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                        {% if form.username.errors %}
+                        <p class="text-sm text-red-500 mt-1">{{ form.username.errors|striptags }}</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="id_password" class="block text-sm font-medium text-green-400 mb-2">Password</label>
+                        {{ form.password|add_class:"w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+                        {% if form.password.errors %}
+                        <p class="text-sm text-red-500 mt-1">{{ form.password.errors|striptags }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Login
+                </button>
+            </form>
+            <p class="mt-4 text-sm text-center text-gray-200">
+                Don't have an account? <a href="{% url 'register' %}" class="text-blue-500 hover:underline">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
