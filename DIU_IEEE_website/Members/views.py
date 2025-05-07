@@ -6,7 +6,13 @@ from django.contrib import messages
 
 @login_required
 def profile_view(request):
-    profile, created = MemberProfile.objects.get_or_create(user=request.user)
+    if request.user.is_superuser:
+        try:
+            profile = request.user.profile
+        except MemberProfile.DoesNotExist:
+            profile = None
+    else:
+        profile, created = MemberProfile.objects.get_or_create(user=request.user)
     projects = Projects.objects.filter(user=request.user)
     return render(request, 'profile.html', {'profile': profile, 'projects': projects})
 

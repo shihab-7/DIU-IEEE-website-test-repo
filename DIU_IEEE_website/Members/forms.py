@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class MemberProfileForm(forms.ModelForm):
     class Meta:
         model = MemberProfile
-        fields = ['profile_picture', 'date_of_birth', 'about', 'skills', 'facebook_link', 'linkedin_link', 'github_link', 'member_type', 'member_id', 'club_position']
+        fields = ['profile_picture', 'date_of_birth', 'about', 'skills', 'facebook_link', 'linkedin_link', 'github_link', 'member_type', 'club_position']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
             'about': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
@@ -16,10 +16,15 @@ class MemberProfileForm(forms.ModelForm):
             'facebook_link': forms.URLInput(attrs={'placeholder': 'https://www.facebook.com/yourprofile'}),
             'linkedin_link': forms.URLInput(attrs={'placeholder': 'https://www.linkedin.com/in/yourprofile'}),
             'github_link': forms.URLInput(attrs={'placeholder': 'https://www.github.com/yourprofile'}),
-            'member_id': forms.TextInput(attrs={'placeholder': 'Enter your member ID'}),
             'club_position': forms.TextInput(attrs={'placeholder': 'Enter your club position'}),
             'member_type': forms.Select(attrs={'class': 'form-control'}),
         }
+
+    def clean_member_id(self):
+        member_id = self.cleaned_data.get('member_id')
+        if MemberProfile.objects.filter(member_id=member_id).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("The member ID must be unique. Please choose a different ID.")
+        return member_id
 
 
 class CustomUserEditForm(UserChangeForm):
@@ -52,7 +57,7 @@ class ProjectForm(forms.ModelForm):
 class MemberEditForm(forms.ModelForm):
     class Meta:
         model = MemberProfile
-        fields = ['profile_picture', 'date_of_birth', 'about', 'skills', 'facebook_link', 'linkedin_link', 'github_link', 'member_type', 'member_id', 'club_position']
+        fields = ['profile_picture', 'date_of_birth', 'about', 'skills', 'facebook_link', 'linkedin_link', 'github_link', 'member_type', 'club_position']
     def __init__(self, *args, **kwargs):
         user_instance = kwargs.pop('user_instance', None)
         super().__init__(*args, **kwargs)

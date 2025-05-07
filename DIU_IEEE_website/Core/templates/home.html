@@ -97,9 +97,8 @@ Home Page
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center mb-6 pt-8 underline decoration-indigo-500 decoration-4 bg-gradient-to-t from-green-500 to-yellow-300 text-transparent bg-clip-text">Our Advisors</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            {% for member in advisors_and_committee_members %}
-                {% if member.member_type == 'advisor' %}
+        {% if advisors %}
+            {% for member in advisors %}
                 <div class="bg-gradient-to-bl from-slate-900 to-violet-700 rounded-lg shadow-md p-4 flex flex-col items-center max-w-xs mx-auto">
                     {% if member.profile_picture %}
                     <img src="{{ member.profile_picture.url }}" alt="{{ member.user.first_name }}'s img" class="w-28 h-28 rounded-full mb-4 object-cover">
@@ -153,28 +152,31 @@ Home Page
                         </a>
                     </div>
                 </div>
-                {% endif %}
             {% empty %}
-            <p class="col-span-full text-center text-gray-700">No advisors available at the moment.</p>
+            <p class="col-span-full text-center text-gray-200">No advisors available at the moment.</p>
             {% endfor %}
+        {% else %}
+            <p class="col-span-full text-center text-gray-200">No advisors available at the moment.</p>
+        {% endif %} 
         </div>
     </div>
 </section>
 
 <!--committe members section-->
+<!--Core-->
 <section class="bg-transparent py-8" id="committee_members_section">
     <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center mb-6 pt-8 underline decoration-indigo-500 decoration-4 bg-gradient-to-t from-green-500 to-yellow-300 text-transparent bg-clip-text">Committee Members</h2>
+        <h2 class="text-4xl font-bold text-center mb-6 pt-8 underline decoration-indigo-500 decoration-4 bg-gradient-to-t from-green-500 to-yellow-300 text-transparent bg-clip-text">Core Members</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {% for member in advisors_and_committee_members %}
-            {% if member.member_type == 'committee' %}
-                <div class="bg-gray-100 rounded-lg shadow-md p-4 flex flex-col items-center">
+            {% if core_posts %}
+                {% for member in core_posts %}
+                <div class="bg-gradient-to-b from-green-700 to-black rounded-lg shadow-md p-4 flex flex-col items-center max-w-xs mx-auto">
                     <img 
                         src="{{ member.profile_picture.url }}" 
                         alt="{{ member.user.first_name }} {{ member.user.last_name }}" 
                         class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 object-cover"
                     />
-                    <h3 class="text-center text-sm sm:text-base md:text-lg font-semibold mb-2">
+                    <h3 class="text-center text-yellow-300 text-sm sm:text-base md:text-lg font-semibold mb-2">
                         {% if member.user.first_name and member.user.last_name %}
                         {{ member.user.first_name }} {{ member.user.last_name }}
                         {% else %}
@@ -182,8 +184,8 @@ Home Page
                         {% endif %}
                     </h3>
                     
-                    <p class="text-center text-xs sm:text-sm md:text-base font-semibold mb-2">Member Since: {{ member.joined_date|date:"F j, Y" }}</p>
-                    <p class="text-center text-xs sm:text-sm md:text-base font-semibold mb-2">Position: {{ member.club_position }}</p>
+                    <p class="text-xs text-cyan-200 text-center mb-2">Member Since: <span class="text-blue-500">{{ member.joined_date|date:"F j, Y" }}</span></p>
+                    <p class="text-xs text-cyan-200 text-center mb-4">Position: <span class="text-orange-500">{{ member.club_position }}</span></p>
                     <a 
                         href="#" 
                         class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-xs sm:text-sm md:text-base"
@@ -191,13 +193,57 @@ Home Page
                         View Profile
                     </a>
                 </div>
-            {% endif %}
-            {% empty %}
-            <p class="col-span-full text-center text-gray-700">No committee members available at the moment.</p>
-            {% endfor %}
+                {%empty%}
+                <p class="col-span-full text-center text-gray-200">No core members available at the moment.</p>
+                {% endfor %}
+        {% else %}
+            <p class="col-span-full text-center text-gray-200">No core members available at the moment.</p>
+        {% endif %}
         </div>
     </div>
 </section>
+
+<!--operating-->
+<section class="bg-transparent py-8" id="committe_members_section">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-6 pt-8 underline decoration-indigo-500 decoration-4 bg-gradient-to-t from-green-500 to-yellow-300 text-transparent bg-clip-text">Operating Members</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% if operating_posts %}
+                
+            {% for member in operating_posts %}
+                <div class="bg-gradient-to-t from-black to-gray-400 rounded-lg shadow-md p-4 flex flex-col items-center max-w-xs mx-auto">
+                    <img 
+                        src="{{ member.profile_picture.url }}" 
+                        alt="{{ member.user.first_name }} {{ member.user.last_name }}" 
+                        class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mb-4 object-cover"
+                    />
+                    <h3 class="text-center text-blue-400 text-sm sm:text-base md:text-lg font-semibold mb-2">
+                        {% if member.user.first_name and member.user.last_name %}
+                        {{ member.user.first_name }} {{ member.user.last_name }}
+                        {% else %}
+                        {{ member.user.username }}
+                        {% endif %}
+                    </h3>
+                    
+                    <p class="text-xs text-cyan-200 text-center mb-2">Member Since: <span class="text-blue-500">{{ member.joined_date|date:"F j, Y" }}</span></p>
+                    <p class="text-xs text-cyan-200 text-center mb-4">Position: <span class="text-orange-500">{{ member.club_position }}</span></p>
+                    <a 
+                        href="#" 
+                        class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-xs sm:text-sm md:text-base"
+                    >
+                        View Profile
+                    </a>
+                </div>
+                {%empty%}
+                <p class="col-span-full text-center text-gray-200">No operating members available at the moment.</p>
+                {% endfor %}
+            {% else %}
+            <p class="col-span-full text-center text-gray-200">No operating members available at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
 
 <!--contact section-->
 <section class="bg-transparent py-8" id="contact_section">

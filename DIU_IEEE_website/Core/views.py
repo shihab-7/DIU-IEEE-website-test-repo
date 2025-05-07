@@ -7,8 +7,10 @@ from django.db.models import Q
 
 def home(request):
     events = Event.objects.all().order_by('-event_date')
-    advisors_and_committee_members = MemberProfile.objects.filter(member_type__in=['advisor', 'committee'])
-
+    advisors = MemberProfile.objects.filter(member_type='advisor')
+    core_posts = MemberProfile.objects.filter(member_type='committee', club_position__in=['chairperson', 'vice-chairperson', 'general secretary', 'treasurer'])
+    operating_posts = MemberProfile.objects.filter(member_type='committee', club_position__in=['webmaster', 'event coordinator', 'public & social media coordinator', 'public relationship secretary', 'women activities coordinator', 'membership & outreach coordinator', 'technical coordinator'])
+    
     #member search
     search_query = request.GET.get('q')
     member = None
@@ -20,7 +22,8 @@ def home(request):
         )
     else:
         member = MemberProfile.objects.none()
-    return render(request, 'home.html', {'events': events, 'advisors_and_committee_members': advisors_and_committee_members, 'member': member})
+
+    return render(request, 'home.html', {'events': events, 'advisors': advisors,'core_posts': core_posts,'operating_posts': operating_posts,'member': member})
 
 
 def research(request):
